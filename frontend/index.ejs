@@ -1,5 +1,4 @@
 <%- await include('frontend/Header.ejs', { title: 'Welcome' }) %>
-<body>
     <h1>TEST</h1>
     <form action="/api/newItem" method="POST">
         <input type="text" name="itemName" id="itemName">
@@ -16,7 +15,6 @@
                         .addEventListener("click", () => {append(document.querySelector("#form"), { items });
                                                             console.log(items);});
                 </script>
-                <!--TODO-->
             </li>
         </template>
     </ul>
@@ -49,5 +47,4 @@
                 scope.addEventListener("reset", () => scope.remove())
             </script>
     </template>
-</body>
-</html>
+<%- await include('frontend/footer.ejs') %>

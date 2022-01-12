@@ -1,0 +1,53 @@
+<%- await include('frontend/Header.ejs', { title: 'Welcome' }) %>
+<body>
+    <h1>TEST</h1>
+    <form action="/api/newItem" method="POST">
+        <input type="text" name="itemName" id="itemName">
+        <button type="submit">add item</button>
+    </form>
+    <ul>
+        <template data-template-foreach="loadList" data-template-let="items">
+            <li>
+                <h3>{{ items.beschreibung}}</h3>
+                <button>test</button>
+                <script type="module">
+                    import { append } from "./lib/templating.js";
+                    scope.querySelector("button")
+                        .addEventListener("click", () => {append(document.querySelector("#form"), { items });
+                                                            console.log(items);});
+                </script>
+                <!--TODO-->
+            </li>
+        </template>
+    </ul>
+    
+    <template id="form">
+        <form>
+            <div>
+                <textarea></textarea>
+                <button type="submit">add</button>
+                <button type="reset">reset</button>
+            </div>
+            <script type="module">
+                import { init } from "./lib/templating.js";
+                scope.addEventListener("submit", async (event) => {
+                    event.preventDefault();
+                    const beschreibung = scope.querySelector("textarea").value;
+                    const itemId = await fetch("/api/newId").then(r => r.text());
+                    const item = {
+                        id: itemId,
+                        beschreibung: `${beschreibung}: ${items.id}`,
+                    };
+                    await fetch("/api/newItem", {
+                        method: "POST",
+                        body: JSON.stringify(item),
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    scope.remove();
+                    init();
+                });
+                scope.addEventListener("reset", () => scope.remove())
+            </script>
+    </template>
+</body>
+</html>
